@@ -1,5 +1,5 @@
 module ActiveAdmin
-  class ResourceController < BaseController
+  class ResourceController < ActiveAdminBaseController
     module ResourceClassMethods
 
       # Override the default `resource_class` class and instance

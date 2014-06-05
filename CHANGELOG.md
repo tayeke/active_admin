@@ -268,7 +268,7 @@ application locales. [#1775][] by [@caifara][]
 * Support subURI on logout [#1681][] by [@yawn][]
 
 ### Bug fix
-* Apply before_filter to BaseController [#1683][] by [@yorch][]
+* Apply before_filter to ActiveAdminBaseController [#1683][] by [@yorch][]
 * ... and much more.
 
 ### Contributions

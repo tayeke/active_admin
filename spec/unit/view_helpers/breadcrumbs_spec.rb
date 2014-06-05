@@ -9,7 +9,7 @@ describe "Breadcrumbs" do
     def params; {}; end
     def link_to(name, url); {name: name, path: url}; end
 
-    actions = ActiveAdmin::BaseController::ACTIVE_ADMIN_ACTIONS
+    actions = ActiveAdmin::ActiveAdminBaseController::ACTIVE_ADMIN_ACTIONS
 
     let(:user)        { double display_name: 'Jane Doe' }
     let(:user_config) { double find_resource: user, resource_name: double(route_key: 'users'),

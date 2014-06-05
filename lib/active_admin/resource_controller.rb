@@ -10,7 +10,7 @@ require 'active_admin/resource_controller/resource_class_methods'
 module ActiveAdmin
   # All Resources Controller inherits from this controller.
   # It implements actions and helpers for resources.
-  class ResourceController < BaseController
+  class ResourceController < ActiveAdminBaseController
     layout :determine_active_admin_layout
 
     respond_to :html, :xml, :json

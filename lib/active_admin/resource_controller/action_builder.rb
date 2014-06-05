@@ -1,5 +1,5 @@
 module ActiveAdmin
-  class ResourceController < BaseController
+  class ResourceController < ActiveAdminBaseController
 
     module ActionBuilder
       extend ActiveSupport::Concern

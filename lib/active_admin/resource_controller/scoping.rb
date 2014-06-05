@@ -1,5 +1,5 @@
 module ActiveAdmin
-  class ResourceController < BaseController
+  class ResourceController < ActiveAdminBaseController
 
     # This module deals with scoping entire controllers to a relation
     module Scoping

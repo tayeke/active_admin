@@ -1,7 +1,7 @@
 require 'csv'
 
 module ActiveAdmin
-  class ResourceController < BaseController
+  class ResourceController < ActiveAdminBaseController
 
     # This module overrides CSV responses to allow large data downloads.
     # Could be expanded to JSON and XML in the future.

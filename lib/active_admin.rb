@@ -25,7 +25,7 @@ module ActiveAdmin
   autoload :Breadcrumbs,              'active_admin/breadcrumbs'
   autoload :Callbacks,                'active_admin/callbacks'
   autoload :Component,                'active_admin/component'
-  autoload :BaseController,           'active_admin/base_controller'
+  autoload :ActiveAdminBaseController,           'active_admin/base_controller'
   autoload :CanCanAdapter,            'active_admin/cancan_adapter'
   autoload :ControllerAction,         'active_admin/controller_action'
   autoload :CSVBuilder,               'active_admin/csv_builder'

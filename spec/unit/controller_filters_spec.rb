@@ -6,7 +6,7 @@ describe ActiveAdmin::Application do
 
   it 'controllers_for_filters' do
     expect(application.controllers_for_filters).to eq [
-      ActiveAdmin::BaseController, ActiveAdmin::Devise::SessionsController,
+      ActiveAdmin::ActiveAdminBaseController, ActiveAdmin::Devise::SessionsController,
       ActiveAdmin::Devise::PasswordsController, ActiveAdmin::Devise::UnlocksController,
       ActiveAdmin::Devise::RegistrationsController, ActiveAdmin::Devise::ConfirmationsController
     ]

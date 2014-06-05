@@ -1,5 +1,5 @@
 module ActiveAdmin
-  class ResourceController < BaseController
+  class ResourceController < ActiveAdminBaseController
 
     # This module overrides most of the data access methods in Inherited
     # Resources to provide Active Admin with it's data.
