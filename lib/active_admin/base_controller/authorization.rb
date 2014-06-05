@@ -17,7 +17,7 @@ module ActiveAdmin
     end
   end
 
-  class BaseController < ::InheritedResources::Base
+  class ActiveAdminBaseController < ::InheritedResources::Base
     module Authorization
       include MethodOrProcHelper
       extend ActiveSupport::Concern
