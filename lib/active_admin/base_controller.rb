@@ -1,5 +1,3 @@
-require 'inherited_resources'
-
 require 'active_admin/base_controller/authorization'
 require 'active_admin/base_controller/menu'
 
@@ -8,6 +6,7 @@ module ActiveAdmin
   # It implements ActiveAdmin controllers core features.
   class ActiveAdminBaseController < ::InheritedResources::Base
     helper ::ActiveAdmin::ViewHelpers
+    helper_method :env
 
     layout :determine_active_admin_layout
 

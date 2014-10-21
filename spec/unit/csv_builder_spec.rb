@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe ActiveAdmin::CSVBuilder do
 
@@ -94,6 +94,40 @@ describe ActiveAdmin::CSVBuilder do
     end
   end
 
+  context "with a humanize_name column option" do
+    context "with symbol column name" do
+      let(:builder) do
+        ActiveAdmin::CSVBuilder.new do
+          column :my_title, humanize_name: false
+        end.tap(&:exec_columns)
+      end
+
+      describe "the column" do
+        let(:column){ builder.columns.first }
+
+        it "should have a name of 'my_title'" do
+          expect(column.name).to eq "my_title"
+        end
+      end
+    end
+
+    context "with string column name" do
+      let(:builder) do
+        ActiveAdmin::CSVBuilder.new do
+          column "my_title", humanize_name: false
+        end.tap(&:exec_columns)
+      end
+
+      describe "the column" do
+        let(:column){ builder.columns.first }
+
+        it "should have a name of 'my_title'" do
+          expect(column.name).to eq "my_title"
+        end
+      end
+    end
+  end
+
   context "with a separator" do
     let(:builder) do
       ActiveAdmin::CSVBuilder.new(col_sep: ";").tap(&:exec_columns)
@@ -101,6 +135,26 @@ describe ActiveAdmin::CSVBuilder do
 
     it "should have proper separator" do
       expect(builder.options).to eq({col_sep: ";"})
+    end
+  end
+
+  context "with humanize_name option" do
+    let(:builder) do
+      ActiveAdmin::CSVBuilder.new(humanize_name: false) do
+        column :my_title
+      end.tap(&:exec_columns)
+    end
+
+    describe "the column" do
+      let(:column){ builder.columns.first }
+
+      it "should have humanize_name option set" do
+        expect(column.options).to eq humanize_name: false
+      end
+
+      it "should have a name of 'my_title'" do
+        expect(column.name).to eq "my_title"
+      end
     end
   end
 
@@ -131,10 +185,10 @@ describe ActiveAdmin::CSVBuilder do
     end
   end
 
-  pending '#build'
-  pending '#exec_columns'
+  skip '#build'
+  skip '#exec_columns'
 
-  pending '#build_row' do
+  skip '#build_row' do
     it 'renders non-strings'
     it 'encodes values correctly'
     it 'passes custom encoding options to String#encode!'

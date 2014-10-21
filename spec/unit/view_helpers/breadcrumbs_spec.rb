@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe "Breadcrumbs" do
 
@@ -29,6 +29,18 @@ describe "Breadcrumbs" do
 
       it "should not have any items" do
         expect(trail.size).to eq 0
+      end
+    end
+
+    context "when path 'admin/users'" do
+      let(:path) { 'admin/users' }
+
+      it 'should have one item' do
+        expect(trail.size).to eq 1
+      end
+      it 'should have a link to /admin' do
+        expect(trail[0][:name]).to eq 'Admin'
+        expect(trail[0][:path]).to eq '/admin'
       end
     end
 

@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 class Post
   ransacker :custom_searcher do
@@ -97,12 +97,15 @@ describe ActiveAdmin::Filters::ViewHelper do
       end
     end
 
-    it "should select the option which is currently being filtered"
-
+    it "should select the option which is currently being filtered" do
+      scope = Post.search title_starts_with: "foo"
+      body = render_filter scope, title: {}
+      expect(body).to have_tag("option", "Starts with", attributes: { value: "title_starts_with", selected: "selected" })
+    end
 
     context "with predicate" do
       %w[eq equals cont contains start starts_with end ends_with].each do |predicate|
-        describe '"'+predicate+'"' do
+        describe "'#{predicate}'" do
           let(:body) { filter :"title_#{predicate}" }
 
           it "shouldn't include a select field" do
@@ -179,17 +182,26 @@ describe ActiveAdmin::Filters::ViewHelper do
     it "should generate a text field for input" do
       expect(body).to have_tag("input", attributes: { name: 'q[id_equals]' })
     end
-    it "should select the option which is currently being filtered"
+    it "should select the option which is currently being filtered" do
+      scope = Post.search id_greater_than: 1
+      body = render_filter scope, id: {}
+      expect(body).to have_tag("option", "Greater than", attributes: { value: "id_greater_than", selected: "selected" })
+    end
   end
 
   describe "boolean attribute" do
     context "boolean datatypes" do
       let(:body) { filter :starred }
 
-      it "should create a check box for equals to" do
-        expect(body).to have_tag("input", attributes: {
-                                            name: "q[starred_eq]",
-                                            type: "checkbox" })
+      it "should generate a select" do
+        expect(body).to have_tag "select", attributes: { name: "q[starred_eq]" }
+      end
+      it "should set the default text to 'Any'" do
+        expect(body).to have_tag "option", "Any", attributes: { value: "" }
+      end
+      it "should create an option for true and false" do
+        expect(body).to have_tag "option", "Yes", attributes: { value: "true" }
+        expect(body).to have_tag "option", "No", attributes: { value: "false" }
       end
 
       it "should translate the label for boolean field" do
@@ -202,10 +214,15 @@ describe ActiveAdmin::Filters::ViewHelper do
     context "non-boolean data types" do
       let(:body) { filter :title_present, as: :boolean }
 
-      it "should create a check box for equals to" do
-        expect(body).to have_tag("input", attributes: {
-                                            name: "q[title_present]",
-                                            type: "checkbox" })
+      it "should generate a select" do
+        expect(body).to have_tag "select", attributes: { name: "q[title_present]" }
+      end
+      it "should set the default text to 'Any'" do
+        expect(body).to have_tag "option", "Any", attributes: { value: "" }
+      end
+      it "should create an option for true and false" do
+        expect(body).to have_tag "option", "Yes", attributes: { value: "true" }
+        expect(body).to have_tag "option", "No", attributes: { value: "false" }
       end
     end
   end
@@ -291,7 +308,7 @@ describe ActiveAdmin::Filters::ViewHelper do
   end # belongs to
 
   describe "has_and_belongs_to_many" do
-    pending "add HABTM models so this can be tested"
+    skip "add HABTM models so this can be tested"
   end
 
   describe "has_many :through" do

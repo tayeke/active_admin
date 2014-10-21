@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe ActiveAdmin::Views::TableFor do
   describe "creating with the dsl" do
@@ -9,6 +9,92 @@ describe ActiveAdmin::Views::TableFor do
 
     let(:assigns){ { collection: collection } }
     let(:helpers){ mock_action_view }
+
+    context "when creating a column using symbol argument" do
+      let(:table) do
+        render_arbre_component assigns, helpers do
+          table_for(collection, :title)
+        end
+      end
+
+      it "should create a table header based on the symbol" do
+        expect(table.find_by_tag("th").first.content).to eq "Title"
+      end
+
+      it "should create a table row for each element in the collection" do
+        expect(table.find_by_tag("tr").size).to eq 4 # 1 for head, 3 for rows
+      end
+
+      ["First Post", "Second Post", "Third Post"].each_with_index do |content, index|
+        it "should create a cell with #{content}" do
+          expect(table.find_by_tag("td")[index].content).to eq content
+        end
+      end
+    end
+
+    context "when creating many columns using symbol arguments" do
+      let(:table) do
+        render_arbre_component assigns, helpers do
+          table_for(collection, :title, :created_at)
+        end
+      end
+
+      it "should create a table header based on the symbol" do
+        expect(table.find_by_tag("th").first.content).to eq "Title"
+        expect(table.find_by_tag("th").last.content).to eq "Created At"
+      end
+
+      it "should add a class to each table header based on the col name" do
+        expect(table.find_by_tag("th").first.class_list.to_a.join(' ')).to eq "col col-title"
+        expect(table.find_by_tag("th").last.class_list.to_a.join(' ')).to eq "col col-created_at"
+      end
+
+      it "should create a table row for each element in the collection" do
+        expect(table.find_by_tag("tr").size).to eq 4 # 1 for head, 3 for rows
+      end
+
+      it "should create a cell for each column" do
+        expect(table.find_by_tag("td").size).to eq 6
+      end
+
+      it "should add a class for each cell based on the col name" do
+        expect(table.find_by_tag("td").first.class_list.to_a.join(' ')).to eq "col col-title"
+        expect(table.find_by_tag("td").last.class_list.to_a.join(' ')).to eq "col col-created_at"
+      end
+    end
+
+    context "when creating a column using symbol arguments and another using block" do
+      let(:table) do
+        render_arbre_component assigns, helpers do
+          table_for(collection, :title) do
+            column :created_at
+          end
+        end
+      end
+
+      it "should create a table header based on the symbol" do
+        expect(table.find_by_tag("th").first.content).to eq "Title"
+        expect(table.find_by_tag("th").last.content).to eq "Created At"
+      end
+
+      it "should add a class to each table header based on the col name" do
+        expect(table.find_by_tag("th").first.class_list.to_a.join(' ')).to eq "col col-title"
+        expect(table.find_by_tag("th").last.class_list.to_a.join(' ')).to eq "col col-created_at"
+      end
+
+      it "should create a table row for each element in the collection" do
+        expect(table.find_by_tag("tr").size).to eq 4 # 1 for head, 3 for rows
+      end
+
+      it "should create a cell for each column" do
+        expect(table.find_by_tag("td").size).to eq 6
+      end
+
+      it "should add a class for each cell based on the col name" do
+        expect(table.find_by_tag("td").first.class_list.to_a.join(' ')).to eq "col col-title"
+        expect(table.find_by_tag("td").last.class_list.to_a.join(' ')).to eq "col col-created_at"
+      end
+    end
 
     context "when creating a column with a symbol" do
       let(:table) do
@@ -227,42 +313,42 @@ describe ActiveAdmin::Views::TableFor do
 
     context "when default" do
       let(:table_column){ build_column(:username) }
-      it { should be_sortable }
+      it { is_expected.to be_sortable }
 
       describe '#sort_key' do
         subject { super().sort_key }
-        it{ should == "username" }
+        it{ is_expected.to eq("username") }
       end
     end
 
     context "when a block given with no sort key" do
       let(:table_column){ build_column("Username"){ } }
-      it { should_not be_sortable }
+      it { is_expected.not_to be_sortable }
     end
 
     context "when a block given with a sort key" do
       let(:table_column){ build_column("Username", sortable: :username){ } }
-      it { should be_sortable }
+      it { is_expected.to be_sortable }
 
       describe '#sort_key' do
         subject { super().sort_key }
-        it{ should == "username" }
+        it{ is_expected.to eq("username") }
       end
     end
 
     context "when sortable: false with a symbol" do
       let(:table_column){ build_column(:username, sortable: false) }
-      it { should_not be_sortable }
+      it { is_expected.not_to be_sortable }
     end
 
     context "when sortable: false with a symbol and string" do
       let(:table_column){ build_column("Username", :username, sortable: false) }
-      it { should_not be_sortable }
+      it { is_expected.not_to be_sortable }
     end
 
     context "when :sortable column is an association" do
       let(:table_column){ build_column("Category", :category, Post) }
-      it { should_not be_sortable }
+      it { is_expected.not_to be_sortable }
     end
 
   end

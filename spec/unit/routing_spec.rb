@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-require 'spec_helper'
+require 'rails_helper'
 
 describe ActiveAdmin, "Routing", type: :routing do
 
@@ -15,6 +15,14 @@ describe ActiveAdmin, "Routing", type: :routing do
 
   it "should route to the admin dashboard" do
     expect(get('/admin')).to route_to 'admin/dashboard#index'
+  end
+
+  describe "root path helper" do
+    context "when in admin namespace" do
+      it "should be admin_root_path" do
+        expect(admin_root_path).to eq "/admin"
+      end
+    end
   end
 
   describe "standard resources" do

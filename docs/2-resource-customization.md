@@ -70,7 +70,7 @@ ActiveAdmin.register Post do
   controller do
     def create
       # Good
-      @post = Post.new(permitted_params)
+      @post = Post.new(permitted_params[:post])
       # Bad
       @post = Post.new(params[:post])
 
@@ -380,7 +380,7 @@ different menus, say perhaps based on user permissions. For example:
 
 ```ruby
 ActiveAdmin.register Ticket do
-  belongs_to: :project
+  belongs_to :project
   navigation_menu do
     authorized?(:manage, SomeResource) ? :project : :restricted_menu
   end

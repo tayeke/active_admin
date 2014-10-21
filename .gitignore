@@ -1,19 +1,20 @@
-## MAC OS
+## Mac
 .DS_Store
 
-## WINDOWS
+## Windows
 .Thumbs.db
 
-## TEXTMATE
+## TextMate
+*.tm_project
 *.tmproj
 tmtags
 
-## EMACS
+## Emacs
 *~
 \#*
 .\#*
 
-## VIM
+## Vim
 *.swp
 # IDEA / RUBYMINE
 .idea
@@ -23,7 +24,7 @@ tmtags
 .ruby-version
 .ruby-gemset
 
-## PROJECT::GENERAL
+## Project (general)
 tags
 coverage
 rdoc
@@ -31,7 +32,8 @@ doc
 .yardoc
 pkg
 
-## PROJECT::SPECIFIC
+## Project (specific)
+bin/
 .bundle
 spec/rails
 *.sqlite3-journal

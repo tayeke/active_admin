@@ -22,7 +22,7 @@ module ActiveAdmin
 
         def build_active_admin_head
           within @head do
-            insert_tag Arbre::HTML::Title, [title, render_or_call_method_or_proc_on(self, active_admin_application.site_title)].join(" | ")
+            insert_tag Arbre::HTML::Title, [title, render_or_call_method_or_proc_on(self, active_admin_namespace.site_title)].compact.join(" | ")
             active_admin_application.stylesheets.each do |style, options|
               text_node stylesheet_link_tag(style, options).html_safe
             end
@@ -42,11 +42,18 @@ module ActiveAdmin
         def build_page
           within @body do
             div id: "wrapper" do
+              build_unsupported_browser
               build_header
               build_title_bar
               build_page_content
               build_footer
             end
+          end
+        end
+
+        def build_unsupported_browser
+          if active_admin_namespace.unsupported_browser_matcher =~ env["HTTP_USER_AGENT"]
+            insert_tag view_factory.unsupported_browser
           end
         end
 
@@ -58,7 +65,6 @@ module ActiveAdmin
           insert_tag view_factory.title_bar, title, action_items_for_action
         end
 
-
         def build_page_content
           build_flash_messages
           div id: "active_admin_content", class: (skip_sidebar? ? "without_sidebar" : "with_sidebar") do
@@ -68,11 +74,9 @@ module ActiveAdmin
         end
 
         def build_flash_messages
-          if active_admin_flash_messages.any?
-            div class: 'flashes' do
-              active_admin_flash_messages.each do |type, message|
-                div message, class: "flash flash_#{type}"
-              end
+          div class: 'flashes' do
+            flash.each do |type, message|
+              div message, class: "flash flash_#{type}"
             end
           end
         end
@@ -86,7 +90,7 @@ module ActiveAdmin
         end
 
         def main_content
-          I18n.t('active_admin.main_content', model: self.class.name).html_safe
+          I18n.t('active_admin.main_content', model: title).html_safe
         end
 
         def title

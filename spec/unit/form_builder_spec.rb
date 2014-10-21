@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe ActiveAdmin::FormBuilder do
 
@@ -259,6 +259,8 @@ describe ActiveAdmin::FormBuilder do
         end
       end
 
+      let(:valid_html_id) { /^[A-Za-z]+[\w\-\:\.]*$/ }
+
       it "should translate the association name in header" do
         with_translation activerecord: {models: {post: {one: 'Blog Post', other: 'Blog Posts'}}} do
           expect(body).to have_tag('h3', 'Blog Posts')
@@ -301,6 +303,19 @@ describe ActiveAdmin::FormBuilder do
         expect(link[:class]).to eq('button has_many_add')
         expect(link.text).to eq('Add New Post')
         expect(link[:href]).to eq('#')
+      end
+
+      it "should set an HTML-id valid placeholder" do
+        link = Capybara.string(body).find('.has_many_container > a.button.has_many_add')
+        expect(link[:'data-placeholder']).to match valid_html_id
+      end
+
+      describe "with namespaced model" do
+        it "should set an HTML-id valid placeholder" do
+          allow(Post).to receive(:name).and_return "ActiveAdmin::Post"
+          link = Capybara.string(body).find('.has_many_container > a.button.has_many_add')
+          expect(link[:'data-placeholder']).to match valid_html_id
+        end
       end
     end
 
@@ -383,7 +398,7 @@ describe ActiveAdmin::FormBuilder do
       context "with an existing post" do
         let :body do
           build_form({url: '/categories'}, Category.new) do |f|
-            f.object.posts.build.stub(:new_record? => false)
+            allow(f.object.posts.build).to receive(:new_record?).and_return(false)
             f.has_many :posts, allow_destroy: true do |p|
               p.input :title
             end
@@ -530,7 +545,7 @@ describe ActiveAdmin::FormBuilder do
       end
     end
 
-    pending "should render the block if it returns nil" do
+    skip "should render the block if it returns nil" do
       body = build_form({url: '/categories'}, Category.new) do |f|
         f.object.posts.build
         f.has_many :posts do |p|

@@ -36,9 +36,13 @@ module ActiveAdmin
         type = args[1]
         label = options.delete(:label)
         classes = options.delete(:class)
-        status = convert_to_boolean_status(status) 
+        status = convert_to_boolean_status(status)
 
-        content = label || status.titleize if status
+        if status
+          content = label || if s = status.to_s and s.present?
+            I18n.t "active_admin.status_tag.#{s.downcase}", default: s.titleize
+          end
+        end
 
         super(content, options)
 
@@ -60,7 +64,12 @@ module ActiveAdmin
       end
 
       def status_to_class(status)
-        status.titleize.gsub(/\s/, '').underscore
+        case status
+        when String, Symbol
+          status.to_s.titleize.gsub(/\s/, '').underscore
+        else
+          ''
+        end
       end
     end
   end
